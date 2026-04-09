@@ -41,6 +41,10 @@ def test_calculator_add(page, fastapi_server):
     # Click the button that has the exact text "Add". This triggers the addition operation.
     page.click('button:text("Add")')
     
+    # Wait for the result to appear in the DOM before checking it.
+    # This ensures the async JavaScript has completed and updated the result div.
+    page.locator('#result:has-text("Result: 15")').wait_for()
+    
     # Use an assertion to check that the text within the result div (with id 'result') is exactly "Result: 15".
     # This verifies that the addition operation was performed correctly and the result is displayed as expected.
     assert page.inner_text('#result') == 'Result: 15'
@@ -66,6 +70,10 @@ def test_calculator_divide_by_zero(page, fastapi_server):
     
     # Click the button that has the exact text "Divide". This triggers the division operation.
     page.click('button:text("Divide")')
+    
+    # Wait for the error message to appear in the DOM before checking it.
+    # This ensures the async JavaScript has completed and updated the result div.
+    page.locator('#result:has-text("Error: Cannot divide by zero!")').wait_for()
     
     # Use an assertion to check that the text within the result div (with id 'result') is exactly
     # "Error: Cannot divide by zero!". This verifies that the application handles division by zero
